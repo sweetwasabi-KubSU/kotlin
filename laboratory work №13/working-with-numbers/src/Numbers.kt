@@ -1,41 +1,57 @@
 import kotlin.math.abs
 
 fun main() {
-    val number = inputNumber()
+    launchMenu()
+}
 
-//    // task 6
-//    println("Sum of digits: ${sumDigits(number)}")
-//
-//    // task 7.1
-//    println("Max digit: ${maxDigit(number)}")
-//
-//    // task 7.2
-//    println("Min digit: ${minDigit(number)}")
-//
-//    // task 7.3
-//    println("Mult of digits: ${multDigits(number)}")
-//
-//    // task 8.1
-//    try {
-//        println("Max prime divisor of number: ${maxPrimeDivisor(number)}")
-//    }
-//    catch(e: java.lang.ArithmeticException)
-//    {
-//        println("Error: ${e.message}!")
-//    }
-//
-//    // task 8.2
-//    println("Mult of digits not divisible by 5: ${multDigitsNotDivBy(number,5)}")
-//
-//    // task 8.3
-//    try {
-//        println("\nMax odd not prime divisor of number: ${maxOddNotPrimeDiv(number)}")
-//        println("Mult of digits: ${multDigits(number)}")
-//        println("\nTheir GCD: ${task8(number)}")
-//    }
-//    catch(e: ArithmeticException) {
-//        println("Error: ${e.message}!")
-//    }
+fun launchMenu() {
+    println("***METHODS***\n")
+
+    println("0: exit")
+    println("1: sumDigits")
+    println("2: maxDigit")
+    println("3: minDigit")
+    println("4: multDigits")
+    println("5: maxPrimeDivisor")
+    println("6: multDigitsNotDivBy")
+    println("7: maxOddNotPrimeDiv\n")
+
+    print("Enter the method number:> ")
+    val methodNumber = readLine()
+
+    val validSet = setOf("1","2","3","4","5","6","7")
+    val number: Int
+
+    if (validSet.contains(methodNumber)) {
+        println()
+        number = inputNumber()
+    }
+    else number = 0
+
+    try {
+        when (methodNumber) {
+            "0" -> return
+            "1" -> println("Sum of digits: ${sumDigits(number)}")
+            "2" -> println("Max digit: ${maxDigit(number)}")
+            "3" -> println("Min digit: ${minDigit(number)}")
+            "4" -> println("Mult of digits: ${multDigits(number)}")
+            "5" -> println("Max prime divisor of number: ${maxPrimeDivisor(number)}")
+            "6" -> println("Mult of digits not divisible by 5: ${multDigitsNotDivBy(number,5)}")
+            "7" -> {
+                println("\nMax odd not prime divisor of number: ${maxOddNotPrimeDiv(number)}")
+                println("Mult of digits: ${multDigits(number)}")
+                println("\nTheir GCD: ${task8(number)}")
+            }
+            else -> println("Error: invalid method number!")
+        }
+    }
+    catch(e: java.lang.ArithmeticException)
+    {
+        println("Error: ${e.message}!")
+    }
+
+    println()
+    launchMenu()
 }
 
 // ввод числа (рекурсия, пока число некорректно)
