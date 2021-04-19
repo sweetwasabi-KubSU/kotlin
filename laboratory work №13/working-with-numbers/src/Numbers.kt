@@ -5,7 +5,10 @@ fun main() {
     // launchMenu()
 
     // task 10.19
-    println("Number of Sundays: ${problem19()}")
+    // println("Number of Sundays: ${problem19()}")
+
+    // task 10.39
+    println("P = ${problem39()}")
 }
 
 fun launchMenu() {
@@ -259,3 +262,28 @@ fun numberOfDays(month: Int, year: Int): Int =
         (month == 12) -> 31
         else -> throw DataFormatException("month isn't in range from 1 to 12")
     }
+
+// task 10.39: Если p - периметр прямоугольного треугольника, {a, b, c},
+// какое значение при p ≤ 1000 имеет наибольшее количество решений?
+// *размера стека по умолчанию не хватает: Run/Debug Configuration VM Options = -Xss64M*
+// *осторожно: может быть, перегруз по памяти...*
+// *тот самый случай, когда циклы были бы лучше рекурсии - !!!*
+fun problem39(): Int {
+    fun problem39(p: Int, a: Int, result: Int, solutions: Int, i: Int): Int {
+        return if (a < p / 3) {
+            if (p * (p - 2 * a) % (2 * (p - a)) == 0)
+                problem39(p, a + 1, result, solutions, i + 1)
+            else
+                problem39(p, a + 1, result, solutions, i)
+        }
+        else if (p < 1000) {
+            if (i > solutions)
+                problem39(p + 2, 2, p, i, 0)
+            else
+                problem39(p + 2, 2, result, solutions, 0)
+        }
+        else result
+    }
+
+    return problem39(2,2,0,0,0)
+}
