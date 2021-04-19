@@ -1,7 +1,11 @@
+import java.util.zip.DataFormatException
 import kotlin.math.abs
 
 fun main() {
-    launchMenu()
+    // launchMenu()
+
+    // task 10.19
+    println("Number of Sundays: ${problem19()}")
 }
 
 fun launchMenu() {
@@ -26,7 +30,7 @@ fun launchMenu() {
         println()
         number = inputNumber()
     }
-    else number = 0
+    else number = -1
 
     try {
         when (methodNumber) {
@@ -215,4 +219,43 @@ fun numbersGCD(a: Int, b: Int): Int =
         (a == b) -> a
         (a > b) -> numbersGCD(a - b, b)
         else -> numbersGCD(a, b - a)
+    }
+
+// task 10.19: количество месяцев, начавшихся с воскресенья
+// диапазон [1 января 1901; 31 декабря 2000]
+fun problem19(): Int {
+    fun problem19(dayOfWeek: Int, month: Int, year: Int): Int {
+        return if (!(month == 1 && year == 2001)) {
+            val newDayOfWeek = (numberOfDays(month, year) % 7 + dayOfWeek) % 7
+            val counter =
+                if (newDayOfWeek == 0) 1
+                else 0
+
+            if (month == 12)
+                problem19(newDayOfWeek,1,year + 1) + counter
+            else
+                problem19(newDayOfWeek,month + 1, year) + counter
+        }
+        else 0
+    }
+
+    return problem19(2,1,1901)
+}
+
+fun numberOfDays(month: Int, year: Int): Int =
+    when {
+        (month == 1) -> 31
+        (month == 2) && (year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0)) -> 29
+        (month == 2) -> 28
+        (month == 3) -> 31
+        (month == 4) -> 30
+        (month == 5) -> 31
+        (month == 6) -> 30
+        (month == 7) -> 31
+        (month == 8) -> 31
+        (month == 9) -> 30
+        (month == 10) -> 31
+        (month == 11) -> 30
+        (month == 12) -> 31
+        else -> throw DataFormatException("month isn't in range from 1 to 12")
     }
