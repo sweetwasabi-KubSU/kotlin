@@ -1,16 +1,79 @@
 import java.util.zip.DataFormatException
 import kotlin.math.abs
+import java.io.File
 
 fun main() {
+    // task 9
     // launchMenu()
 
     // task 10.19
     // println("Number of Sundays: ${problem19()}")
 
     // task 10.39
-    println("P = ${problem39()}")
+    // println("P = ${problem39()}")
+
+    // task 10.59
+    problem59()
 }
 
+fun problem59() {
+    val message = readFile("p059_cipher.txt", ',')
+    var key = analysis(message, 3)
+
+    val encrypt = encryptMessage(message, key)
+    for (code in encrypt)
+        print(code.toChar())
+}
+
+fun readFile(path: String, separator: Char): List<Int> {
+    val listOfCodes: MutableList<Int> = mutableListOf()
+
+    val inputFile = File(path)
+    for (line in inputFile.readLines())
+        for (code in line.split(separator))
+            listOfCodes.add(code.toInt())
+
+    return listOfCodes
+}
+
+fun encryptMessage(message: List<Int>, key: IntArray): List<Int> {
+    val encryptedMessage: MutableList<Int> = mutableListOf()
+    for (i in message.indices)
+        encryptedMessage.add((message[i] xor key[i % key.size]))
+
+    return encryptedMessage
+}
+
+fun analysis(message: List<Int>, keyLength: Int): IntArray {
+    var maxSize = 0
+    for (i in message.indices) {
+        if (message[i] > maxSize)
+            maxSize = message[i];
+    }
+
+    val aMessage = MutableList(keyLength) { MutableList(maxSize + 1) { 0 } }
+    val key = IntArray(keyLength)
+
+    for (i in message.indices) {
+        val j = i % keyLength;
+        aMessage[j][message[i]]++;
+        if (aMessage[j][message[i]] > aMessage[j][key[j]])
+            key[j] = message[i];
+    }
+
+    val spaceAscii = 32
+    for (i in 0 until keyLength) {
+        key[i] = key[i] xor spaceAscii
+    }
+
+    return key
+}
+
+// task 9: Реализовать возможность пользователю выбирать,
+// какие из методов для введенного числа он хочет исполнить,
+// и продолжать работу программы, пока пользователь не укажет обратное,
+// то есть пользователь может вводить числа и методы для них,
+// пока не введет соответствующую команду
 fun launchMenu() {
     println("***METHODS***\n")
 
@@ -227,6 +290,24 @@ fun numbersGCD(a: Int, b: Int): Int =
 // task 10.19: количество месяцев, начавшихся с воскресенья
 // диапазон [1 января 1901; 31 декабря 2000]
 fun problem19(): Int {
+    fun numberOfDays(month: Int, year: Int): Int =
+        when {
+            (month == 1) -> 31
+            (month == 2) && (year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0)) -> 29
+            (month == 2) -> 28
+            (month == 3) -> 31
+            (month == 4) -> 30
+            (month == 5) -> 31
+            (month == 6) -> 30
+            (month == 7) -> 31
+            (month == 8) -> 31
+            (month == 9) -> 30
+            (month == 10) -> 31
+            (month == 11) -> 30
+            (month == 12) -> 31
+            else -> throw DataFormatException("month isn't in range from 1 to 12")
+        }
+
     fun problem19(dayOfWeek: Int, month: Int, year: Int): Int {
         return if (!(month == 1 && year == 2001)) {
             val newDayOfWeek = (numberOfDays(month, year) % 7 + dayOfWeek) % 7
@@ -244,24 +325,6 @@ fun problem19(): Int {
 
     return problem19(2,1,1901)
 }
-
-fun numberOfDays(month: Int, year: Int): Int =
-    when {
-        (month == 1) -> 31
-        (month == 2) && (year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0)) -> 29
-        (month == 2) -> 28
-        (month == 3) -> 31
-        (month == 4) -> 30
-        (month == 5) -> 31
-        (month == 6) -> 30
-        (month == 7) -> 31
-        (month == 8) -> 31
-        (month == 9) -> 30
-        (month == 10) -> 31
-        (month == 11) -> 30
-        (month == 12) -> 31
-        else -> throw DataFormatException("month isn't in range from 1 to 12")
-    }
 
 // task 10.39: Если p - периметр прямоугольного треугольника, {a, b, c},
 // какое значение при p ≤ 1000 имеет наибольшее количество решений?
