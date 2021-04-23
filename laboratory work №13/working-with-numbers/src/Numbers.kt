@@ -16,59 +16,6 @@ fun main() {
     problem59()
 }
 
-fun problem59() {
-    val message = readFile("p059_cipher.txt", ',')
-    var key = analysis(message, 3)
-
-    val encrypt = encryptMessage(message, key)
-    for (code in encrypt)
-        print(code.toChar())
-}
-
-fun readFile(path: String, separator: Char): List<Int> {
-    val listOfCodes: MutableList<Int> = mutableListOf()
-
-    val inputFile = File(path)
-    for (line in inputFile.readLines())
-        for (code in line.split(separator))
-            listOfCodes.add(code.toInt())
-
-    return listOfCodes
-}
-
-fun encryptMessage(message: List<Int>, key: IntArray): List<Int> {
-    val encryptedMessage: MutableList<Int> = mutableListOf()
-    for (i in message.indices)
-        encryptedMessage.add((message[i] xor key[i % key.size]))
-
-    return encryptedMessage
-}
-
-fun analysis(message: List<Int>, keyLength: Int): IntArray {
-    var maxSize = 0
-    for (i in message.indices) {
-        if (message[i] > maxSize)
-            maxSize = message[i];
-    }
-
-    val aMessage = MutableList(keyLength) { MutableList(maxSize + 1) { 0 } }
-    val key = IntArray(keyLength)
-
-    for (i in message.indices) {
-        val j = i % keyLength;
-        aMessage[j][message[i]]++;
-        if (aMessage[j][message[i]] > aMessage[j][key[j]])
-            key[j] = message[i];
-    }
-
-    val spaceAscii = 32
-    for (i in 0 until keyLength) {
-        key[i] = key[i] xor spaceAscii
-    }
-
-    return key
-}
-
 // task 9: Реализовать возможность пользователю выбирать,
 // какие из методов для введенного числа он хочет исполнить,
 // и продолжать работу программы, пока пользователь не укажет обратное,
@@ -349,4 +296,64 @@ fun problem39(): Int {
     }
 
     return problem39(2,2,0,0,0)
+}
+
+// task 10.59: расшифровать сообщение
+// и вывести сумму ASCII кодов сообщения
+fun problem59() {
+    fun readFile(path: String, separator: Char): List<Int> {
+        val listOfCodes: MutableList<Int> = mutableListOf()
+
+        val inputFile = File(path)
+        for (line in inputFile.readLines())
+            for (code in line.split(separator))
+                listOfCodes.add(code.toInt())
+
+        return listOfCodes
+    }
+
+    fun decryptMessage(message: List<Int>, key: List<Int>): List<Int> {
+        val encryptedMessage: MutableList<Int> = mutableListOf()
+        for (i in message.indices)
+            encryptedMessage.add((message[i] xor key[i % key.size]))
+
+        return encryptedMessage
+    }
+
+    // частотный анализ
+    fun analysis(message: List<Int>, keyLength: Int): List<Int> {
+        var maxSize = 0
+        for (i in message.indices) {
+            if (message[i] > maxSize)
+                maxSize = message[i];
+        }
+
+        val aMessage = MutableList(keyLength) { MutableList(maxSize + 1) {0} }
+        val key = MutableList(keyLength) {0}
+
+        for (i in message.indices) {
+            val j = i % keyLength;
+            aMessage[j][message[i]]++;
+            if (aMessage[j][message[i]] > aMessage[j][key[j]])
+                key[j] = message[i];
+        }
+
+        val spaceAscii = 32
+        for (i in 0 until keyLength) {
+            key[i] = key[i] xor spaceAscii
+        }
+
+        return key
+    }
+
+    val message = readFile("p059_cipher.txt", ',')
+
+    var key = analysis(message, 3)
+    val decryptedMessage = decryptMessage(message, key)
+
+    print("Decrypted message: ")
+    for (code in decryptedMessage)
+        print(code.toChar())
+
+    print("\nSum of ASCII values: ${decryptedMessage.sum()}")
 }
