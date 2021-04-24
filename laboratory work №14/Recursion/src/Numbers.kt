@@ -22,10 +22,16 @@ fun main() {
     // println("Min digit (tail recursion): ${minDigitTail(number)}")
 
     // task 3.3
-    println("Max digit (recursion up): ${maxDigitUp(number)}")
+    // println("Max digit (recursion up): ${maxDigitUp(number)}")
 
     // task 3.3
-    println("Max digit (tail recursion): ${maxDigitTail(number)}")
+    // println("Max digit (tail recursion): ${maxDigitTail(number)}")
+
+    // task 4
+    println("\nSum of digits: ${calculateNumber(number, ::sumDigitsUp)}")
+    println("Mult of digits: ${calculateNumber(number, ::multDigitsUp)}")
+    println("Min digit: ${calculateNumber(number, ::minDigitUp)}")
+    println("Max digit: ${calculateNumber(number, ::maxDigitUp)}")
 }
 
 // ввод числа
@@ -138,3 +144,8 @@ fun maxDigitTail(number: Int): Int {
     }
     return maxDigitTail(number, -1)
 }
+
+// task 4: функция обход числа, которая принимает число,
+// функцию и инициализирующее значение по умолчанию (!)
+fun calculateNumber(number: Int, func: (number: Int) -> Int, initValue: Int = 0): Int =
+    func(number)
