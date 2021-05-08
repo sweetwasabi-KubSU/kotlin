@@ -33,11 +33,14 @@ fun main() {
     // println("Min digit: ${calculate(number, ::minDigitUp)}")
     // println("Max digit: ${calculate(number, ::maxDigitUp)}")
 
-    // task 5
+    // task 6: проверить функцию task 5
+
+    // 1-ый и 2-ой пример: считает сумму цифр, если каждая из них больше 5
     // calculateWithCondition(number, ::sumDigitsTail, ::checkDigits)
     // calculateWithCondition(number, ::sumDigitsTail, ::checkDigits, 0)
 
-
+    // 3-ий пример: считает произведение цифр, если каждая из них больше 5
+    // calculateWithCondition(number, ::multDigitsTail, ::checkDigits, 1)
 }
 
 // ввод числа
@@ -174,5 +177,4 @@ fun checkDigits(number: Int): Boolean =
         else
             checkDigits(number / 10)
     }
-    else
-        false
+    else false
