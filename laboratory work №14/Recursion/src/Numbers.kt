@@ -3,44 +3,63 @@ import kotlin.math.abs
 fun main() {
     val number = inputNumber()
 
-    // task 1
-    // println("Sum of digits (recursion up): ${sumDigitsUp(number)}")
-
-    // task 2
-    // println("Sum of digits (tail recursion): ${sumDigitsTail(number)}")
-
-    // task 3.1
-    // println("Mult of digits (recursion up): ${multDigitsUp(number)}")
-
-    // task 3.1
-    // println("Mult of digits (tail recursion): ${multDigitsTail(number)}")
-
-    // task 3.2
-    // println("Min digit (recursion up): ${minDigitUp(number)}")
-
-    // task 3.2
-    // println("Min digit (tail recursion): ${minDigitTail(number)}")
-
-    // task 3.3
-    // println("Max digit (recursion up): ${maxDigitUp(number)}")
-
-    // task 3.3
-    // println("Max digit (tail recursion): ${maxDigitTail(number)}")
-
-    // task 4
-    // println("\nSum of digits: ${calculate(number, ::sumDigitsUp)}")
-    // println("Mult of digits: ${calculate(number, ::multDigitsUp)}")
-    // println("Min digit: ${calculate(number, ::minDigitUp)}")
-    // println("Max digit: ${calculate(number, ::maxDigitUp)}")
-
-    // task 6: проверить функцию task 5
-
-    // 1-ый и 2-ой пример: считает сумму цифр, если каждая из них больше 5
-    // calculateWithCondition(number, ::sumDigitsTail, ::checkDigits)
-    // calculateWithCondition(number, ::sumDigitsTail, ::checkDigits, 0)
-
-    // 3-ий пример: считает произведение цифр, если каждая из них больше 5
-    // calculateWithCondition(number, ::multDigitsTail, ::checkDigits, 1)
+//    // task 1
+//    println("Sum of digits (recursion up): ${sumDigitsUp(number)}")
+//
+//    // task 2
+//    println("Sum of digits (tail recursion): ${sumDigitsTail(number)}")
+//
+//    // task 3.1
+//    println("Mult of digits (recursion up): ${multDigitsUp(number)}")
+//
+//    // task 3.1
+//    println("Mult of digits (tail recursion): ${multDigitsTail(number)}")
+//
+//    // task 3.2
+//    println("Min digit (recursion up): ${minDigitUp(number)}")
+//
+//    // task 3.2
+//    println("Min digit (tail recursion): ${minDigitTail(number)}")
+//
+//    // task 3.3
+//    println("Max digit (recursion up): ${maxDigitUp(number)}")
+//
+//    // task 3.3
+//    println("Max digit (tail recursion): ${maxDigitTail(number)}")
+//
+//    // task 4
+//    println("\nSum of digits: ${calculate(number, ::sumDigitsUp)}")
+//    println("Mult of digits: ${calculate(number, ::multDigitsUp)}")
+//    println("Min digit: ${calculate(number, ::minDigitUp)}")
+//    println("Max digit: ${calculate(number, ::maxDigitUp)}")
+//
+//    // task 6: проверить функцию task 5
+//
+//    // 1-ый и 2-ой пример: считает сумму цифр, если каждая из них больше 5
+//    calculateWithCondition(number, ::sumDigitsTail, ::checkDigits)
+//    calculateWithCondition(number, ::sumDigitsTail, ::checkDigits, 0)
+//
+//    // 3-ий пример: считает произведение цифр, если каждая из них больше 5
+//    calculateWithCondition(number, ::multDigitsTail, ::checkDigits, 1)
+//
+//    // task 7: переписать task 13.8 с использованием
+//    // только хвоствой рекурсии и тела-выражения
+//    try {
+//        // task 7.1
+//        // println("Max prime divisor of number: ${maxPrimeDivisor(number)}")
+//
+//        // task 7.2
+//        // println("Mult of digits not divisible by 5: ${multDigitsNotDivBy(number,5)}")
+//
+//        // task 7.3
+//        // println("\nMax odd not prime divisor of number: ${maxOddNotPrimeDiv(number)}")
+//        // println("Mult of digits: ${multDigitsUp(number)}")
+//        // println("\nTheir GCD: ${task7_3(number)}")
+//    }
+//    catch(e: ArithmeticException)
+//    {
+//        println("\nError: ${e.message}!")
+//    }
 }
 
 // ввод числа
@@ -178,3 +197,105 @@ fun checkDigits(number: Int): Boolean =
             checkDigits(number / 10)
     }
     else false
+
+// task 7.1: максимальный простой делитель числа
+// *допущение, что простой делитель 1 - 1*
+fun maxPrimeDivisor(number: Int): Int =
+    try {
+        if ((number == 1) || isNumberPrime(number))
+            number
+        else
+            maxPrimeDivisor(number, number / 2)
+    }
+    catch(e: ArithmeticException)
+    {
+        throw e
+    }
+
+fun maxPrimeDivisor(number: Int, divisor: Int): Int =
+    try {
+        if (isNumberPrime(divisor) && (number % divisor == 0))
+            divisor
+        else
+            maxPrimeDivisor(number,divisor - 1)
+    }
+    catch(e: ArithmeticException)
+    {
+        throw e
+    }
+
+// проверка, простое ли число
+fun isNumberPrime(number: Int): Boolean =
+    when (number) {
+        0 -> throw ArithmeticException("0 has no prime divisors")
+        1 -> false
+        2 -> true
+        else -> isNumberPrime(number, number / 2)
+    }
+
+fun isNumberPrime(number: Int, divisor: Int): Boolean =
+    try {
+        when {
+            (divisor == 1) -> true
+            (number % divisor == 0) -> false
+            else -> isNumberPrime(number, divisor - 1)
+        }
+    }
+    catch(e: ArithmeticException)
+    {
+        throw e
+    }
+
+// task 7.2: произведение цифр числа, не делящихся на 5
+// *если число полностью состоит из 5, то результат - 1*
+fun multDigitsNotDivBy(number: Int, notDivisor: Int): Int =
+    when {
+        (number / 10 == 0) && (number % 10 != notDivisor) -> abs(number % 10)
+        (number / 10 == 0) -> 1
+        (number % 10 != notDivisor) -> multDigitsNotDivBy(number / 10, notDivisor) * abs(number % 10)
+        else -> multDigitsNotDivBy(number / 10, notDivisor)
+    }
+
+// task 7.3: НОД максимального нечетного непростого
+// делителя числа и прозведения цифр данного числа
+// *если число или произведение цифр числа - 0, то НОД - 1*
+// *пример: 45*
+fun task7_3 (number: Int): Int =
+    try {
+        numbersGCD(maxOddNotPrimeDiv(number), multDigitsUp(number))
+    }
+    catch(e: ArithmeticException) {
+        throw e
+    }
+
+// максимальный нечётный непростой делитель
+fun maxOddNotPrimeDiv(number: Int): Int =
+    try {
+        if ((number % 2 != 0) && !isNumberPrime(number))
+            number
+        else
+            maxOddNotPrimeDiv(number, number / 2)
+    }
+    catch(e: ArithmeticException) {
+        throw e
+    }
+
+fun maxOddNotPrimeDiv(number: Int, divisor: Int): Int =
+    try {
+        if (!isNumberPrime(divisor) && (number % divisor == 0) && (divisor % 2 != 0))
+            divisor
+        else
+            maxOddNotPrimeDiv(number, divisor - 1)
+    }
+    catch(e: ArithmeticException) {
+        throw e
+    }
+
+// наиобольший общий делитель
+fun numbersGCD(a: Int, b: Int): Int =
+    when {
+        ((a <= 0) || (b <= 0)) -> throw ArithmeticException("One of the numbers <= 0")
+        (a == b) -> a
+        (a > b) -> numbersGCD(a - b, b)
+        else -> numbersGCD(a, b - a)
+    }
