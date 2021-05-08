@@ -59,6 +59,8 @@ fun main() {
 //    catch(e: ArithmeticException) {
 //        println("\nError: ${e.message}!")
 //    }
+//    // task 8
+//    someMenu(number)
 }
 
 // ввод числа
@@ -295,3 +297,30 @@ fun numbersGCD(a: Int, b: Int): Int =
         (a > b) -> numbersGCD(a - b, b)
         else -> numbersGCD(a, b - a)
     }
+
+// task 8: модифицировать возможность пользователя выполнять
+// одну из нескольких операций над числами, введя функцию op,
+// возвращающую функцию с одним аргументом и двумя значениями (???)
+fun op(choice: String?): (Int) -> Int =
+    when(choice) {
+        "1" -> ::sumDigitsTail
+        "2" -> ::multDigitsTail
+        else -> throw IllegalArgumentException("Invalid function number")
+    }
+
+fun someMenu(number: Int) {
+    println("\nWhich of the functions do you want to do?\n")
+
+    println("1: sumDigitsTail")
+    println("2: multDigitsTail\n")
+
+    print("Enter the function number:> ")
+
+    try {
+        println("Function result: ${op(readLine())(number)}")
+    }
+    catch(e: IllegalArgumentException) {
+        println("Error: ${e.message}! Try again!")
+        someMenu(number)
+    }
+}
