@@ -56,8 +56,7 @@ fun main() {
 //        // println("Mult of digits: ${multDigitsUp(number)}")
 //        // println("\nTheir GCD: ${task7_3(number)}")
 //    }
-//    catch(e: ArithmeticException)
-//    {
+//    catch(e: ArithmeticException) {
 //        println("\nError: ${e.message}!")
 //    }
 }
@@ -207,8 +206,7 @@ fun maxPrimeDivisor(number: Int): Int =
         else
             maxPrimeDivisor(number, number / 2)
     }
-    catch(e: ArithmeticException)
-    {
+    catch(e: ArithmeticException) {
         throw e
     }
 
@@ -219,8 +217,7 @@ fun maxPrimeDivisor(number: Int, divisor: Int): Int =
         else
             maxPrimeDivisor(number,divisor - 1)
     }
-    catch(e: ArithmeticException)
-    {
+    catch(e: ArithmeticException) {
         throw e
     }
 
@@ -241,8 +238,7 @@ fun isNumberPrime(number: Int, divisor: Int): Boolean =
             else -> isNumberPrime(number, divisor - 1)
         }
     }
-    catch(e: ArithmeticException)
-    {
+    catch(e: ArithmeticException) {
         throw e
     }
 
