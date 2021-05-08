@@ -28,10 +28,16 @@ fun main() {
     // println("Max digit (tail recursion): ${maxDigitTail(number)}")
 
     // task 4
-    println("\nSum of digits: ${calculateNumber(number, ::sumDigitsUp)}")
-    println("Mult of digits: ${calculateNumber(number, ::multDigitsUp)}")
-    println("Min digit: ${calculateNumber(number, ::minDigitUp)}")
-    println("Max digit: ${calculateNumber(number, ::maxDigitUp)}")
+    // println("\nSum of digits: ${calculate(number, ::sumDigitsUp)}")
+    // println("Mult of digits: ${calculate(number, ::multDigitsUp)}")
+    // println("Min digit: ${calculate(number, ::minDigitUp)}")
+    // println("Max digit: ${calculate(number, ::maxDigitUp)}")
+
+    // task 5
+    // calculateWithCondition(number, ::sumDigitsTail, ::checkDigits)
+    // calculateWithCondition(number, ::sumDigitsTail, ::checkDigits, 0)
+
+
 }
 
 // ввод числа
@@ -147,5 +153,26 @@ fun maxDigitTail(number: Int): Int {
 
 // task 4: функция обход числа, которая принимает число,
 // функцию и инициализирующее значение по умолчанию (!)
-fun calculateNumber(number: Int, func: (number: Int) -> Int, initValue: Int = 0): Int =
+fun calculate(number: Int, func: (number: Int) -> Int, initValue: Int = 0): Int =
     func(number)
+
+// task 5: функция обход числа, которая принимает число,
+// функцию с двумя аргументами Int, инициализирующее заполнение
+// и функцию c одним аргументом Int, возврщающую true-false (условие для цифр)
+fun calculateWithCondition(number: Int, funCalculate: (number: Int, value: Int) -> Int, funCondition: (number: Int) -> Boolean, initValue: Int = 0) {
+    if (funCondition(number))
+        println("Function result: ${funCalculate(number, initValue)}")
+    else
+        println("Sorry: digits don't satisfy the condition!")
+}
+
+// проверка, все ли цифры в числе больше 5
+fun checkDigits(number: Int): Boolean =
+    if (number % 10 > 5) {
+        if (number / 10 == 0)
+            true
+        else
+            checkDigits(number / 10)
+    }
+    else
+        false
