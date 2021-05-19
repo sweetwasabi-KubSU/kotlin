@@ -1,19 +1,21 @@
 import java.io.File
 
 fun main() {
-//    //val arrayNumbers: Array<Int> = inputArrayByConsole()
-//    val listNumbers: List<Int> = inputListByConsole()
+//    // val listNumbers: List<Int> = inputListByConsole()
+//    val arrayNumbers: Array<Int> = inputArrayByConsole()
 //    println()
 //
 //    // task 1, 2
-//    println("Min list element: ${min(listNumbers)}")
-//    println("Max list element: ${max(listNumbers)}")
-//    println("Sum of list elements: ${sum(listNumbers)}")
-//    println("Mult of list elements: ${mult(listNumbers)}")
-
-    val arrayNumbers = inputArray()
-    print("\nInput result: ")
-    outputArray<Int>(arrayNumbers)
+//    println("Min list element: ${min(arrayNumbers)}")
+//    println("Max list element: ${max(arrayNumbers)}")
+//    println("Sum of list elements: ${sum(arrayNumbers)}")
+//    println("Mult of list elements: ${mult(arrayNumbers)}")
+//
+//    val arrayNumbers = inputArray()
+//    print("\nInput result: ")
+//    outputArray<Int>(arrayNumbers)
+//
+//    // task 4: задачи 9, 10, 21, 23, 33, 36, 39, 45, 57
 }
 
 // вывод массива
@@ -47,36 +49,14 @@ fun inputArrayByConsole(): Array<Int> {
     }
 }
 
-// конечно, можно было бы сделать круто:
-// убрать лишние и повторяющиеся пробелы
-// (хоп-хей, замена с регулярочками, уу!),
-// допустить как разделитель - новую строку
-// (ну, это клиника - не знаю, что пошло не так),
-// но я усталь, и у меня что-то ломается,
-// поэтому выбираю быть тупой
-// *грустные мысли дианы в час ночи*
-
-// старательно обрабатываю все возможные исключения...
-// я как герой стихотворения Маяковского "Послушайте!",
-// в роли звёзд - исключения
-// "ведь теперь тебе ничего не страшно?"
-
-// на самом деле я молодец, наверное
-
 // ввод массива из файла (разделитель: пробел)
 fun inputArrayByFile(path: String = "ExampleOfArray.txt"): Array<Int> =
     try {
         File(path).readText().split(" ").map { it.toInt() }.toTypedArray()
     }
-    catch(e: NullPointerException) {
-        throw NullPointerException("This file doesn't exist")
-    }
-    catch(e: java.io.FileNotFoundException) {
-        throw NullPointerException("This file doesn't exist")
-    }
-    catch(e: NumberFormatException) {
-        throw NumberFormatException("Can't be cast to Int")
-    }
+    catch(e: NullPointerException) { throw e }
+    catch(e: java.io.FileNotFoundException) { throw e }
+    catch(e: NumberFormatException) { throw e }
 
 // ввод массива из файла (разделитель: пробел)
 // специально для задания 3: нужно, чтобы функция была без параметров
@@ -84,15 +64,9 @@ fun inputArrayByFileV2(): Array<Int> =
     try {
         File("ExampleOfArray.txt").readText().split(" ").map { it.toInt() }.toTypedArray()
     }
-    catch(e: NullPointerException) {
-        throw NullPointerException("This file doesn't exist")
-    }
-    catch(e: java.io.FileNotFoundException) {
-        throw NullPointerException("This file doesn't exist")
-    }
-    catch(e: NumberFormatException) {
-        throw NumberFormatException("Can't be cast to Int")
-    }
+    catch(e: NullPointerException) { throw e }
+    catch(e: java.io.FileNotFoundException) { throw e }
+    catch(e: NumberFormatException) { throw e }
 
 // task 3: спросить пользователя, откуда читать данные,
 // в зависимости от ответа читать или с клавиатуры, или из файла,
@@ -101,7 +75,7 @@ fun inputArrayByFileV2(): Array<Int> =
 fun selectInputMethod(): () -> Array<Int> {
     println("How do you want to input array?")
     println("1. Console")
-    println("2. File\n")
+    println("2. Standard file\n")
     print(">: ")
 
     return when(readLine()) {
@@ -122,43 +96,43 @@ fun inputArray(): Array<Int> {
     return try {
         selectInputMethod()()
     }
-    catch (e: NumberFormatException) {
-        println("\nError: ${e.message}! Check the file.\n")
-        inputArray()
-    }
-    catch(e: NullPointerException) {
-        println("\nError: ${e.message}! I'm sorry, select console :(\n")
-        inputArray()
-    }
-    catch(e: java.io.FileNotFoundException) {
-        println("\nError: ${e.message}! I'm sorry, select console :(\n")
-        inputArray()
+    catch(e: Exception) {
+        when(e) {
+            is NullPointerException, is java.io.FileNotFoundException -> {
+                println("\nError: ${e.message}! I'm sorry, select console :(\n")
+                inputArray()
+            }
+            is NumberFormatException -> {
+                println("\nError: ${e.message}! Check the file.\n")
+                inputArray()
+            }
+            else -> throw e
+        }
     }
 }
-
-// RIP ленивым вычислениям
 
 // task 1, 2: написать одну функцию arrayOp() с применением
 // хвостовой рекурсии, перебирающую элементы массива, принимающую
 // как аргументы массив, лямбда выражение и инициализирующее значение
 // *переименовала arrayOp в listOp для логичности*
-fun listOp(arrayNumbers: List<Int>, calculate: (Int, Int) -> Int, init: Int = 0): Int =
-    if (arrayNumbers.isNotEmpty()) {
-        listOp(arrayNumbers.drop(1), calculate, calculate(arrayNumbers.first(), init))
-    }
-    else init
+tailrec fun arrayOp(array: Iterator <Int>, f : (Int, Int)-> Int, accum: Int = 0): Int =
+    if (array.hasNext())
+        arrayOp(array, f, f(array.next(),accum))
+    else accum
 
 // task 1, 2: написать 4 функции для суммы, произведения,
 // мин и макс, использующих функцию arrayOp()
 
-fun min(arrayNumbers: List<Int>): Int =
-    listOp(arrayNumbers.drop(1), {a: Int, b: Int -> if (a < b) a else b}, arrayNumbers.first())
+fun min(arrayNumbers: Array<Int>): Int =
+    arrayOp(arrayNumbers.iterator(), {a: Int, b: Int -> if (a < b) a else b}, arrayNumbers.first())
 
-fun max(arrayNumbers: List<Int>): Int =
-    listOp(arrayNumbers.drop(1), {a: Int, b: Int -> if (a > b) a else b}, arrayNumbers.first())
+fun max(arrayNumbers: Array<Int>): Int =
+    arrayOp(arrayNumbers.iterator(), {a: Int, b: Int -> if (a > b) a else b}, arrayNumbers.first())
 
-fun sum(arrayNumbers: List<Int>): Int =
-    listOp(arrayNumbers, {a: Int, b: Int -> a + b})
+fun sum(arrayNumbers: Array<Int>): Int =
+    arrayOp(arrayNumbers.iterator(), {a: Int, b: Int -> a + b})
 
-fun mult(arrayNumbers: List<Int>): Int =
-    listOp(arrayNumbers, {a: Int, b: Int -> a * b}, 1)
+fun mult(arrayNumbers: Array<Int>): Int =
+    arrayOp(arrayNumbers.iterator(), {a: Int, b: Int -> a * b}, 1)
+
+// task 4.9: необходимо найти элементы, расположенные перед последним минимальным
