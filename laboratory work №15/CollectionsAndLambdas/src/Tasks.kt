@@ -1,5 +1,4 @@
 import java.io.File
-import javax.xml.stream.events.EndDocument
 
 fun main() {
 //    // val array: Array<Int> = inputArrayByConsole()
@@ -92,11 +91,13 @@ fun main() {
 //    println("Max list element: ${list.maxOrNull()}")
 //    println("Sum of list elements: ${list.sum()}")
 //    println("Mult of list elements: ${list.reduce { acc, i -> acc * i }}")
-
-    // task 7: переписать task 3 через список
-    val list = inputList()
-    print("\nInput result: ")
-    outputList<Int>(list)
+//
+//    // task 7: переписать task 3 через список
+//    val list = inputList()
+//    print("\nInput result: ")
+//    outputList<Int>(list)
+//
+//    // task 8: переписать task 4 через список
 }
 
 // вывод массива
@@ -412,4 +413,125 @@ fun task4_57(array: Array<Int>): Int {
         sum(array.filterIndexed { i, _ -> i < endIndex }.toTypedArray())
 
     return array.withIndex().count { element -> element.value > sumBeforeIndex(array, element.index) } - 1
+}
+
+// task 8: переписать task 4 через список
+
+// task 4.9 (1/9): найти элементы, расположенные перед последним минимальным
+fun task4_9(list: List<Int>): List<Int> {
+    val min = min(list)
+    val lastIndexMin = list.indexOfLast { it == min }
+
+    return list.filterIndexed { index, _ -> index < lastIndexMin }
+}
+
+// task 4.10 (2/9): два массива, найти количество совпадающих по значению элементов
+fun task4_10(list1: List<Int>, list2: List<Int>): Int {
+    fun contains(value1: Int, value2: Int, index2: Int, indexAvailability2: MutableList<Boolean>): Boolean {
+        return if (value1 == value2 && indexAvailability2[index2]) {
+            indexAvailability2[index2] = false
+            true
+        }
+        else false
+    }
+
+    val indexAvailability2 = MutableList(list2.size) { true }
+    val arrayIndexed2 = list2.withIndex()
+
+    return list1.count { value1 -> arrayIndexed2.any { (index2, value2) -> contains(value1, value2, index2, indexAvailability2) } }
+}
+
+// task 4.21 (3/9): найти элементы, расположенные после первого максимального
+fun task4_21(list: List<Int>): List<Int> {
+    val max = max(list)
+    val firstIndexMax = list.indexOfFirst { it == max }
+
+    return list.filterIndexed { index, _ -> index > firstIndexMax }
+}
+
+// task 4.23 (4/9): найти два наименьших элемента
+fun task4_23(list: List<Int>): Pair<Int, Int> {
+    tailrec fun task4_23(it: Iterator<Int>, f: (Int, Int, Int) -> Pair<Int, Int>, mins: Pair<Int, Int>): Pair<Int, Int> =
+        if (it.hasNext())
+            task4_23(it, f, f(it.next(), mins.first, mins.second))
+        else mins
+
+    if (list.size < 2)
+        throw IllegalArgumentException("Incorrect list size")
+
+    val f = { a: Int, b: Int, c: Int ->
+        when {
+            (a < b) -> Pair(a, b)
+            (a < c) -> Pair(b, a)
+            else -> Pair(b, c)
+        }
+    }
+
+    val currentMins =
+        if (list[0] <= list[1])
+            Pair(list[0], list[1])
+        else
+            Pair(list[1], list[0])
+
+    val it = list.iterator()
+    it.next()
+    it.next()
+
+    return task4_23(it, f, currentMins)
+}
+
+// task 4.33 (5/9): проверить, чередуются ли в массиве положительные и отрицательные числа
+fun task4_33(list: List<Int>): Boolean {
+    fun task4_33(it: Iterator<Int>, f: (Int) -> Boolean, flag: Boolean): Boolean =
+        if (it.hasNext()) {
+            if (flag != f(it.next()))
+                task4_33(it, f, !flag)
+            else false
+        }
+        else true
+
+    val f = { element: Int -> element < 0 }
+    val flag = f(list[0])
+
+    return task4_33(list.iterator(), f, !flag)
+}
+
+// task 4.36 (6/9): найти максимальный нечетный элемент
+fun task4_36(list: List<Int>): Int {
+    fun task4_36(it: Iterator<Int>, f: (Int, Int) -> Int, max: Int): Int =
+        if (it.hasNext())
+            task4_36(it, f, f(it.next(), max))
+        else max
+
+    val f = { a: Int, b: Int -> if (a > b && a % 2 != 0) a else b }
+    val result = task4_36(list.iterator(), f, list[0])
+
+    if (result % 2 == 0)
+        throw IllegalArgumentException("List contains only even elements")
+
+    return result
+}
+
+// task 4.39 (7/9): вывести вначале его элементы с четными индексами, а затем - с нечетными
+fun task4_39(list: List<Int>): Pair<List<Int>, List<Int>> =
+    Pair(list.filterIndexed { i, _ -> i % 2 == 0 },
+        list.filterIndexed { i, _ -> i % 2 != 0 })
+
+// task 4.45 (8/9): массив и интервал a..b, найти сумму
+// элементов, значение которых попадает в этот интервал
+// *считаем, что нумерация в интервале так же идёт с нуля*
+fun task4_45(list: List<Int>, a: Int, b: Int): Int {
+    if ((a < 0) || (b < 0) || (a >= b) || (a >= list.size) || (b >= list.size))
+        throw IllegalArgumentException("Incorrect interval")
+
+    return sum(list.filterIndexed { i, _ -> (i > a) && (i < b) })
+}
+
+// task 4.57 (9/9): для введенного списка найти количество
+// таких элементов, которые больше, чем сумма всех предыдущих
+fun task4_57(list: List<Int>): Int {
+    fun sumBeforeIndex(list: List<Int>, endIndex: Int): Int =
+        sum(list.filterIndexed { i, _ -> i < endIndex })
+
+    return list.withIndex().count { element -> element.value > sumBeforeIndex(list, element.index) } - 1
 }
