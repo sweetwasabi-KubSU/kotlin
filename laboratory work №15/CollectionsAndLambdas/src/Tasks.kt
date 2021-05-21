@@ -1,4 +1,6 @@
 import java.io.File
+import kotlin.random.Random
+import kotlin.system.measureTimeMillis
 
 fun main() {
 //    // val array: Array<Int> = inputArrayByConsole()
@@ -98,8 +100,25 @@ fun main() {
 //    outputList<Int>(list)
 //
 //    // task 8: переписать task 4 через список
-}
 
+    // task 9
+    val collections = task9(10000000)
+    val list = collections.first
+    val set = collections.second
+    // print("List/Set: ")
+    // outputList(collections.first)
+
+    val listTime = measureTimeMillis {
+        list.minOrNull()
+    }
+    println("List time: $listTime")
+
+    val setTime = measureTimeMillis {
+        set.minOrNull()
+    }
+    println("Set time: $setTime")
+
+}
 // вывод массива
 fun<T> outputArray(array: Array<T>) {
     print("${array.joinToString(" ")}")
@@ -534,4 +553,12 @@ fun task4_57(list: List<Int>): Int {
         sum(list.filterIndexed { i, _ -> i < endIndex })
 
     return list.withIndex().count { element -> element.value > sumBeforeIndex(list, element.index) } - 1
+}
+
+// task 9: Написать функцию, генерирующую две неизменяемых коллекции,
+// список и множество размера 10_000_000 вещественных чисел,
+// элементы в коллекции одинаковы
+fun task9(size: Int): Pair<List<Double>, Set<Double>> {
+    val list = List(size) { Random.nextDouble() }
+    return Pair(list, list.toSet())
 }
