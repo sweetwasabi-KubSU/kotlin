@@ -2,15 +2,17 @@ import java.io.File
 import javax.xml.stream.events.EndDocument
 
 fun main() {
-    val array: Array<Int> = inputArrayByConsole()
-    println()
-
-//    // task 1, 2
-//    println("Min list element: ${min(array)}")
-//    println("Max list element: ${max(array)}")
-//    println("Sum of list elements: ${sum(array)}")
-//    println("Mult of list elements: ${mult(array)}")
+//    // val array: Array<Int> = inputArrayByConsole()
+//    val list = inputListByConsole()
+//    println()
 //
+//    // task 1, 2
+//    println("Min array element: ${min(array)}")
+//    println("Max array element: ${max(array)}")
+//    println("Sum of array elements: ${sum(array)}")
+//    println("Mult of array elements: ${mult(array)}")
+//
+//    // task 3
 //    val array = inputArray()
 //    print("\nInput result: ")
 //    outputArray<Int>(array)
@@ -76,11 +78,35 @@ fun main() {
 //
 //    // task 4.57 (9/9)
 //    println("Number of matching elements: ${task4_57(array)}")
+//
+//    // *** СПИСКИ ***
+//
+//    // task 5: переписать task 1 через список
+//    println("Min list element: ${min(list)}")
+//    println("Max list element: ${max(list)}")
+//    println("Sum of list elements: ${sum(list)}")
+//    println("Mult of list elements: ${mult(list)}")
+//
+//    // task 6: использовать в task 5 встроенные методы
+//    println("Min list element: ${list.minOrNull()}")
+//    println("Max list element: ${list.maxOrNull()}")
+//    println("Sum of list elements: ${list.sum()}")
+//    println("Mult of list elements: ${list.reduce { acc, i -> acc * i }}")
+
+    // task 7: переписать task 3 через список
+    val list = inputList()
+    print("\nInput result: ")
+    outputList<Int>(list)
 }
 
 // вывод массива
 fun<T> outputArray(array: Array<T>) {
     print("${array.joinToString(" ")}")
+}
+
+// вывод списка
+fun<T> outputList(list: List<T>) {
+    print("${list.joinToString(" ")}")
 }
 
 // ввод списка с клавиатуры
@@ -128,11 +154,30 @@ fun inputArrayByFileV2(): Array<Int> =
     catch(e: java.io.FileNotFoundException) { throw e }
     catch(e: NumberFormatException) { throw e }
 
+// ввод списка из файла (разделитель: пробел)
+fun inputListByFile(path: String = "ExampleOfList.txt"): List<Int> =
+    try {
+        File(path).readText().split(" ").map { it.toInt() }
+    }
+    catch(e: NullPointerException) { throw e }
+    catch(e: java.io.FileNotFoundException) { throw e }
+    catch(e: NumberFormatException) { throw e }
+
+// ввод списка из файла (разделитель: пробел)
+// специально для задания 3: нужно, чтобы функция была без параметров
+fun inputListByFileV2(): List<Int> =
+    try {
+        File("ExampleOfList.txt").readText().split(" ").map { it.toInt() }
+    }
+    catch(e: NullPointerException) { throw e }
+    catch(e: java.io.FileNotFoundException) { throw e }
+    catch(e: NumberFormatException) { throw e }
+
 // task 3: спросить пользователя, откуда читать данные,
 // в зависимости от ответа читать или с клавиатуры, или из файла,
 // для выполнения данной задачи построить функцию,
 // возвращающую функцию, возвращающую массив
-fun selectInputMethod(): () -> Array<Int> {
+fun selectArrayInputMethod(): () -> Array<Int> {
     println("How do you want to input array?")
     println("1. Console")
     println("2. Standard file\n")
@@ -146,7 +191,7 @@ fun selectInputMethod(): () -> Array<Int> {
         "2" -> ::inputArrayByFileV2
         else -> {
             println("Invalid method. Try again!\n")
-            selectInputMethod()
+            selectArrayInputMethod()
         }
     }
 }
@@ -154,7 +199,7 @@ fun selectInputMethod(): () -> Array<Int> {
 // task 3: и для реализации чтения результат этой функции
 fun inputArray(): Array<Int> {
     return try {
-        selectInputMethod()()
+        selectArrayInputMethod()()
     }
     catch(e: Exception) {
         when(e) {
@@ -165,6 +210,46 @@ fun inputArray(): Array<Int> {
             is NumberFormatException -> {
                 println("\nError: ${e.message}! Check the file.\n")
                 inputArray()
+            }
+            else -> throw e
+        }
+    }
+}
+
+// task 7: переписать task 3 через список
+fun selectListInputMethod(): () -> List<Int> {
+    println("How do you want to input list?")
+    println("1. Console")
+    println("2. Standard file\n")
+    print(">: ")
+
+    return when(readLine()) {
+        "1" -> {
+            println()
+            ::inputListByConsole
+        }
+        "2" -> ::inputListByFileV2
+        else -> {
+            println("Invalid method. Try again!\n")
+            selectListInputMethod()
+        }
+    }
+}
+
+// task 7: и для реализации чтения результат этой функции
+fun inputList(): List<Int> {
+    return try {
+        selectListInputMethod()()
+    }
+    catch(e: Exception) {
+        when(e) {
+            is NullPointerException, is java.io.FileNotFoundException -> {
+                println("\nError: ${e.message}! I'm sorry, select console :(\n")
+                inputList()
+            }
+            is NumberFormatException -> {
+                println("\nError: ${e.message}! Check the file.\n")
+                inputList()
             }
             else -> throw e
         }
@@ -193,6 +278,21 @@ fun sum(array: Array<Int>): Int =
     arrayOp(array.iterator(), { a: Int, b: Int -> a + b})
 
 fun mult(array: Array<Int>): Int =
+    arrayOp(array.iterator(), { a: Int, b: Int -> a * b}, 1)
+
+
+// task 5: переписать тоже самое для списка
+
+fun min(array: List<Int>): Int =
+    arrayOp(array.iterator(), { a: Int, b: Int -> if (a < b) a else b}, array.first())
+
+fun max(array: List<Int>): Int =
+    arrayOp(array.iterator(), { a: Int, b: Int -> if (a > b) a else b}, array.first())
+
+fun sum(array: List<Int>): Int =
+    arrayOp(array.iterator(), { a: Int, b: Int -> a + b})
+
+fun mult(array: List<Int>): Int =
     arrayOp(array.iterator(), { a: Int, b: Int -> a * b}, 1)
 
 // task 4.9 (1/9): найти элементы, расположенные перед последним минимальным
