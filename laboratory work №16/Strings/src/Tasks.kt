@@ -7,7 +7,9 @@ fun main() {
     // task1()
 
     // task 2: задачи 3, 8, 16
-    task2_3(s)
+    // println("Shuffled string: ${task2_3(s)}")
+    println("Number of words with even number of characters: ${task2_8(s)}")
+
 }
 
 // task 1: дана строка в которой числа перечислены
@@ -27,9 +29,9 @@ fun task1() {
     }
 }
 
-// task 2.3: дана строка в которой слова записаны через пробел,
+// task 2.3 (1/3): дана строка в которой слова записаны через пробел,
 // перемешать все слова этой строке в случайном порядке
-fun task2_3(s: String) {
+fun task2_3(s: String): String {
     fun replace(list: MutableList<String>, i: Int, j: Int) {
         val temp = list[i]
         list[i] = list[j]
@@ -39,5 +41,13 @@ fun task2_3(s: String) {
     val listOfWords = s.split(" ").toMutableList()
     listOfWords.mapIndexed { i, _ ->  replace(listOfWords, i, Random.nextInt(0, listOfWords.size)) }
 
-    println("Shuffled string: ${listOfWords.joinToString(" ")}")
+    return listOfWords.joinToString(" ")
+}
+
+// task 2.8 (2/3): дана строка в которой записаны слова через пробел,
+// посчитать количество слов с четным количеством символов
+fun task2_8(s: String): Int {
+    val listOfWords = s.split(" ")
+    return if (s == "") 0
+        else listOfWords.count { it -> it.count() % 2 == 0 }
 }
