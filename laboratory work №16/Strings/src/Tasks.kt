@@ -1,15 +1,24 @@
 import kotlin.random.Random
 
 fun main() {
-    print("Input string: ")
-    val s = readLine()!!.toString()
+    // print("Input string: ")
+    // val s = readLine()!!.toString()
 
     // task1()
 
     // task 2: задачи 3, 8, 16
-    // println("Shuffled string: ${task2_3(s)}")
-    println("Number of words with even number of characters: ${task2_8(s)}")
 
+    // task 2.3
+    // println("Shuffled string: ${task2_3(s)}")
+
+    // task 2.8
+    // println("Number of words with even number of characters: ${task2_8(s)}")
+
+    // task 2.16
+    val arrayOfColors = arrayOf("красный", "белый", "синий")
+    println("Shuffled flag colors: ${arrayOfColors.joinToString(" ")}")
+    task2_16(arrayOfColors)
+    println("Sorted flag colors: ${arrayOfColors.joinToString(" ")}")
 }
 
 // task 1: дана строка в которой числа перечислены
@@ -50,4 +59,23 @@ fun task2_8(s: String): Int {
     val listOfWords = s.split(" ")
     return if (s == "") 0
         else listOfWords.count { it -> it.count() % 2 == 0 }
+}
+
+// task 2.16 (3/3): дан массив в котором находятся строки "белый", "синий"
+// и "красный" в случайном порядке, упорядочить массив так,
+// чтобы получился российский флаг
+fun task2_16(arrayOfColors: Array<String>) {
+    val indexOfWhite = arrayOfColors.indexOf("белый")
+    if (indexOfWhite != 0) {
+        val temp = arrayOfColors[0]
+        arrayOfColors[0] = arrayOfColors[indexOfWhite]
+        arrayOfColors[indexOfWhite] = temp
+    }
+
+    val indexOfBlue = arrayOfColors.indexOf("синий")
+    if (indexOfBlue != 1) {
+        val temp = arrayOfColors[1]
+        arrayOfColors[1] = arrayOfColors[indexOfBlue]
+        arrayOfColors[indexOfBlue] = temp
+    }
 }
