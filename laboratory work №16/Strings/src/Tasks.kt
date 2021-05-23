@@ -7,18 +7,7 @@ fun main() {
     // task1()
 
     // task 2: задачи 3, 8, 16
-
-    // task 2.3
-    // println("Shuffled string: ${task2_3(s)}")
-
-    // task 2.8
-    // println("Number of words with even number of characters: ${task2_8(s)}")
-
-    // task 2.16
-    val arrayOfColors = arrayOf("красный", "белый", "синий")
-    println("Shuffled flag colors: ${arrayOfColors.joinToString(" ")}")
-    task2_16(arrayOfColors)
-    println("Sorted flag colors: ${arrayOfColors.joinToString(" ")}")
+    task2_launchMenu()
 }
 
 // task 1: дана строка в которой числа перечислены
@@ -78,4 +67,40 @@ fun task2_16(arrayOfColors: Array<String>) {
         arrayOfColors[1] = arrayOfColors[indexOfBlue]
         arrayOfColors[indexOfBlue] = temp
     }
+}
+
+fun task2_launchMenu() {
+    println("What task do you want to complete?\n")
+    println("0. exit")
+    println("1. shuffle words of string")
+    println("2. number of words with even number of characters")
+    println("3. sort colors as in russian flag\n")
+    print(">: ")
+
+    when(readLine()) {
+        "0" -> return
+        "1" -> {
+            print("\nInput string: ")
+            val s = readLine()!!.toString()
+
+            println("Shuffled string: ${task2_3(s)}")
+        }
+        "2" -> {
+            print("\nInput string: ")
+            val s = readLine()!!.toString()
+
+            println("Number of words with even number of characters: ${task2_8(s)}")
+        }
+        "3" -> {
+            val arrayOfColors = arrayOf("красный", "белый", "синий")
+            println("\nShuffled flag colors: ${arrayOfColors.joinToString(" ")}")
+
+            task2_16(arrayOfColors)
+            println("Sorted flag colors: ${arrayOfColors.joinToString(" ")}")
+        }
+        else -> println("Error: there's no such task. Try again!")
+    }
+
+    println()
+    task2_launchMenu()
 }
