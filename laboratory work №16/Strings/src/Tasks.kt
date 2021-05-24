@@ -3,8 +3,8 @@ import java.util.zip.DataFormatException
 import kotlin.random.Random
 
 fun main() {
-    // print("Input string: ")
-    // val s = readLine()!!.toString()
+     print("Input string: ")
+     val s = readLine()!!.toString()
 
     // task1()
 
@@ -12,9 +12,19 @@ fun main() {
     // task2_launchMenu()
 
     // task 3
-    val text = File("task3_example.txt").readText()
-    println("Dates (check file 'task3_example.txt'):\n")
-    outputList<String>(findDates(text),"\n")
+    // val text = File("task3_example.txt").readText()
+    // println("Dates (check file 'task3_example.txt'):\n")
+    // outputList<String>(findDates(text),"\n")
+
+    // task 4: задачи 3, 8, 16
+    // println("Number of russian characters: ${findRussianCharacters(s)}")
+    // println("Lowercase characters: ${findLowercaseEnglishCharacters(s)}")
+    try {
+        println("Min number of string: ${findMinNumber(s)}")
+    }
+    catch(e: IllegalArgumentException) {
+        println("Error: ${e.message}. Try again!")
+    }
 }
 
 // не очень уверена, насколько эффективно работает joinToString, поэтому:
@@ -177,4 +187,24 @@ fun findDates(s: String): List<String> {
     // поскольку дальше ничего с этими датами делать не нужно
     // возвращаем в удобном виде List<String>, а не List<List<String>>
     return listOfDates2.map { it.joinToString(" ") }
+}
+
+// task 4.3 (1/3): найти общее количество русских символов
+fun findRussianCharacters(s: String): Int {
+    val charactersCode = s.toCharArray().map { it.toInt() }
+    return charactersCode.count { ((it >= 1040) && (it <= 1103)) || (it == 1025) || (it == 1105) }
+}
+
+// task 4.8 (2/3): найти все используемые строчные символы латиницы
+fun findLowercaseEnglishCharacters(s: String): Set<Char> {
+    val lowercaseCharacters = s.toCharArray().filter { (it.toInt() >= 97) && (it.toInt() <= 122) }
+    return lowercaseCharacters.toSet()
+}
+
+// task 4.16 (3/3): найти минимальное из имеющихся целых чисел
+fun findMinNumber(s: String): Int {
+    val regexNumbers = "\\d+".toRegex()
+    val listOfNumbers = regexNumbers.findAll(s).map { it.value.toInt() }.toList()
+
+    return listOfNumbers.minOrNull() ?: throw IllegalArgumentException("String doesn't contain numbers")
 }
