@@ -17,7 +17,14 @@ fun main() {
     // outputList<String>(findDates(text),"\n")
 
     // task 4: задачи 3, 8, 16
-    task4_launchMenu()
+    // task4_launchMenu()
+
+    // task 5
+    val listOfStrings = File("task5_example.txt").readText().split("\n")
+    println("Source list of strings:\n")
+    outputList<String>(listOfStrings, "\n")
+    println("\nSorted list of strings:\n")
+    outputList<String>(sortStringsByLength(listOfStrings), "\n")
 }
 
 // не очень уверена, насколько эффективно работает joinToString, поэтому:
@@ -237,4 +244,9 @@ fun task4_launchMenu() {
 
     println()
     task4_launchMenu()
+}
+
+// task 5: прочитать список строк из файла, упорядочить по длине строки
+fun sortStringsByLength(listOfStrings: List<String>): List<String> {
+    return listOfStrings.sortedBy { it -> it.length }
 }
