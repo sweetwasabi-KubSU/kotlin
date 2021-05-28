@@ -1,3 +1,4 @@
+import kotlin.math.abs
 import java.io.File
 import java.util.zip.DataFormatException
 import kotlin.random.Random
@@ -35,14 +36,23 @@ fun main() {
     // outputList<String>(sortedListOfStrings, "\n")
 
     // task 7
-     val listOfStrings = File("task7_example.txt").readText().split("\n")
-     println("Source list of strings:\n")
-     outputList<String>(listOfStrings, "\n")
-     val sortedListOfStrings = task7(listOfStrings)
-     println("\nSorted list of strings by max quantity of words following the number:\n")
-     outputList<String>(sortedListOfStrings, "\n")
+    // val listOfStrings = File("task7_example.txt").readText().split("\n")
+    // println("Source list of strings:\n")
+    // outputList<String>(listOfStrings, "\n")
+    // val sortedListOfStrings = task7(listOfStrings)
+    // println("\nSorted list of strings by max quantity of words following the number:\n")
+    // outputList<String>(sortedListOfStrings, "\n")
 
     // task 8: задачи 3, 5, 9, 11
+
+    // task 8.3 - правильно работает, ура!
+    // *вычисления на листочке*
+    val listOfStrings = File("task8_3_example.txt").readText().split("\n")
+    println("Source list of strings:\n")
+    outputList<String>(listOfStrings, "\n")
+    val sortedListOfStrings = task8_3(listOfStrings)
+    println("\nSorted list of strings by frequency:\n")
+    outputList<String>(sortedListOfStrings, "\n")
 }
 
 // не очень уверена, насколько эффективно работает joinToString, поэтому:
@@ -326,6 +336,71 @@ fun task7(listOfStrings: List<String>): List<String> {
 
 // task 8.3: отсортировать строки в порядке увеличения разницы между частотой
 // наиболее часто встречаемого символа в строке и частотой его появления в алфавите
+// рассматриваются только буквы английского языка (как маленькие, так и большие)
+fun task8_3(listOfStrings: List<String>): List<String> {
+    fun getLetterFrequency(letter: Char): Double =
+        when(letter) {
+            'E' -> 0.1286
+            'T' -> 0.0972
+            'A' -> 0.0796
+            'I' -> 0.0777
+            'N' -> 0.0751
+            'R' -> 0.0683
+            'O' -> 0.0662
+            'S' -> 0.0662
+            'H' -> 0.0539
+            'D' -> 0.0401
+            'L' -> 0.0351
+            'C' -> 0.0284
+            'F' -> 0.0262
+            'U' -> 0.0248
+            'M' -> 0.0243
+            'G' -> 0.0199
+            'P' -> 0.0181
+            'W' -> 0.018
+            'B' -> 0.016
+            'Y' -> 0.0152
+            'V' -> 0.0115
+            'K' -> 0.0041
+            'Q' -> 0.0017
+            'X' -> 0.0017
+            'J' -> 0.0016
+            'Z' -> 0.0005
+            else -> 0.0
+        }
+
+    // оставляем в строке только английские буквы
+    val englishStringsLetters = listOfStrings.map { it1 ->
+        it1.filter { it2 -> (it2.toInt() in 65..90) || (it2.toInt() in 97..122) }.toUpperCase() }
+
+    // для хранения самой встречаемой буквы в каждой строке
+    val mostCommonLetters = Array(listOfStrings.size) { ' ' }
+
+    // для хранения частоты самой встречаемой буквы в строке
+    val frequency = Array(listOfStrings.size) { 0.0 }
+
+    englishStringsLetters.mapIndexed { i, string ->
+        // буквы в строке и количество их повторений
+        val letters = string.toSet()
+        val counts = Array(letters.size) { 0 }
+
+        // считаем сколько раз встретилась каждая буква
+        string.map { letter -> counts[letters.indexOf(letter)] += 1 }
+
+        // находим самую встречаемую букву
+        val indexOfMaxLetter = counts.indexOf(counts.maxOrNull())
+        val maxLetter = letters.elementAt(indexOfMaxLetter)
+
+        // запоминаем букву и считаем её частоту
+        mostCommonLetters[i] = maxLetter
+        frequency[i] = counts[indexOfMaxLetter] / (listOfStrings[i].count() * 1.0)
+    }
+
+    val result = listOfStrings.withIndex().sortedBy { it ->
+        abs(frequency[it.index] - getLetterFrequency(mostCommonLetters[it.index]))}
+
+    return result.map { it -> it.value }
+}
 
 // task 8.5: отсортировать строки в порядке увеличения квадратичного отклонения частоты встречаемости
 // самого часто встречаемого в строке символа от частоты его встречаемости в текстах на этом алфавите
