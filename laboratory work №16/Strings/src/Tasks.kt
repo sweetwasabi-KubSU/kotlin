@@ -21,7 +21,7 @@ fun main() {
     // task4_launchMenu()
 
     // task 5
-    // val listOfStrings = File("task5_example.txt").readText().split("\n")
+    // val listOfStrings = File("task5_example.txt").readText().split("\r\n")
     // println("Source list of strings:\n")
     // outputList<String>(listOfStrings, "\n")
     // println("\nSorted list of strings:\n")
@@ -36,23 +36,30 @@ fun main() {
     // outputList<String>(sortedListOfStrings, "\n")
 
     // task 7
-    // val listOfStrings = File("task7_example.txt").readText().split("\n")
+    // val listOfStrings = File("task7_example.txt").readText().split("\r\n")
     // println("Source list of strings:\n")
     // outputList<String>(listOfStrings, "\n")
     // val sortedListOfStrings = task7(listOfStrings)
     // println("\nSorted list of strings by max quantity of words following the number:\n")
     // outputList<String>(sortedListOfStrings, "\n")
 
-    // task 8: задачи 3, 5, 9, 11
-
     // task 8.3 - правильно работает, ура!
     // *вычисления на листочке*
-    val listOfStrings = File("task8_3_example.txt").readText().split("\n")
-    println("Source list of strings:\n")
-    outputList<String>(listOfStrings, "\n")
-    val sortedListOfStrings = task8_3(listOfStrings)
-    println("\nSorted list of strings by frequency:\n")
-    outputList<String>(sortedListOfStrings, "\n")
+    // val listOfStrings = File("task8_3_example.txt").readText().split("\r\n")
+    // println("Source list of strings:\n")
+    // outputList<String>(listOfStrings, "\n")
+    // val sortedListOfStrings = task8_3(listOfStrings)
+    // println("\nSorted list of strings by frequency:\n")
+    // outputList<String>(sortedListOfStrings, "\n")
+
+    // task 8.5
+    // *вычисления на листочке*
+    // val listOfStrings = File("task8_5_example.txt").readText().split("\r\n")
+    // println("Source list of strings:\n")
+    // outputList<String>(listOfStrings, "\n")
+    // val sortedListOfStrings = task8_5(listOfStrings)
+    // println("\nSorted list of strings by frequency:\n")
+    // outputList<String>(sortedListOfStrings, "\n")
 }
 
 // не очень уверена, насколько эффективно работает joinToString, поэтому:
@@ -402,11 +409,43 @@ fun task8_3(listOfStrings: List<String>): List<String> {
     return result.map { it -> it.value }
 }
 
-// task 8.5: отсортировать строки в порядке увеличения квадратичного отклонения частоты встречаемости
+// task 8.5: отсортировать строки в порядке увеличения (?квадратичного отклонения? - разницы) частоты встречаемости
 // самого часто встречаемого в строке символа от частоты его встречаемости в текстах на этом алфавите
+fun task8_5(listOfStrings: List<String>): List<String> {
+    // для хранения самой встречаемой буквы в каждой строке
+    val mostCommonSymbols = Array(listOfStrings.size) { ' ' }
 
-// task 8.9: отсортировать строки в порядке увеличения квадратичного отклонения между наибольшим ASCII-кодом
-// символа строки и разницы в ASCII-кодах пар зеркально расположенных символов строки (относительно ее середины)
+    // для хранения частоты самой встречаемой буквы в строке
+    val frequencyOfMCS = Array(listOfStrings.size) { 0.0 }
 
-// task 8.11: отсортировать строки в порядке квадратичного отклонения дисперсии максимального среднего веса
-// ASCII-кода тройки символов в строке от максимального среднего веса ASCII-кода тройки символов в первой строке
+    val allStrings = listOfStrings.joinToString("")
+    val allSymbols = allStrings.toSet()
+    val allCounts = Array(allSymbols.size) { 0 }
+
+    listOfStrings.mapIndexed { i, string ->
+        // буквы в строке и количество их повторений
+        val symbols = string.toSet()
+        val counts = Array(symbols.size) { 0 }
+
+        // считаем сколько раз встретилась каждая буква
+        // в конкретной строке и во всём тексте
+        string.map { symbol -> counts[symbols.indexOf(symbol)] += 1 }
+        counts.withIndex().map { it ->
+            allCounts[allSymbols.indexOf(symbols.elementAt(it.index))] += it.value }
+
+        // находим самую встречаемую букву
+        val indexOfMaxLetter = counts.indexOf(counts.maxOrNull())
+        val maxLetter = symbols.elementAt(indexOfMaxLetter)
+
+        // запоминаем букву и считаем её частоту
+        mostCommonSymbols[i] = maxLetter
+        frequencyOfMCS[i] = counts[indexOfMaxLetter] / (string.count() * 1.0)
+    }
+
+    val allFrequency = allCounts.withIndex().map { it -> it.value / (allStrings.count() * 1.0 ) }
+
+    val result = listOfStrings.withIndex().sortedBy { it ->
+        abs(frequencyOfMCS[it.index] - allFrequency[allSymbols.indexOf(mostCommonSymbols[it.index])]) }
+
+    return result.map { it -> it.value }
+}
