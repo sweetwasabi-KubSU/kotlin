@@ -1,0 +1,1 @@
+open class Dealership(val name: String, val address: String, val phoneNumber: String)
