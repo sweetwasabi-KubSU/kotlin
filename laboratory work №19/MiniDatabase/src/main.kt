@@ -6,18 +6,17 @@ import java.io.FileNotFoundException
 import com.google.gson.JsonParser
 import com.google.gson.JsonArray
 
-
 fun main() {
-    // проверка
-    // val dealership = Dealership(
-    //    "ЮГ-АВТО", "г. Краснодар ул. Дзержинского, д. 102", "+7 (861) 203-28-82")
-
-    // val dealershipToJson = serializeObject(dealership)
-    // val dealershipFromJson = deserializeObject<Dealership>(dealershipToJson)
-
-    // println("***ORIGIN***\n\n$dealership")
-    // println("***TO JSON***\n\n$dealershipToJson\n")
-    // println("***FROM JSON***:\n\n$dealershipFromJson")
+//    // проверка
+//     val dealership = Dealership(
+//        "ЮГ-АВТО", "г. Краснодар ул. Дзержинского, д. 102", "+7 (861) 203-28-82")
+//
+//     val dealershipToJson = serializeObject(dealership)
+//     val dealershipFromJson = deserializeObject<Dealership>(dealershipToJson)
+//
+//     println("***ORIGIN***\n\n$dealership")
+//     println("***TO JSON***\n\n$dealershipToJson\n")
+//     println("***FROM JSON***:\n\n$dealershipFromJson")
 
     val dealerships = listOf(
         Dealership("ЮГ-АВТО", "г. Краснодар ул. Дзержинского, д. 102", "+7 (861) 203-28-82"),

@@ -1,1 +1,26 @@
-[{"function":"специализированное","numberOfWheels":8,"loadCapacity":3700000,"brand":"ГАЗ","model":"54901","countryOfOrigin":"НЕИЗВЕСТНО","cost":11000000,"name":"НЕИЗВЕСТНО","address":"НЕИЗВЕСТНО","phoneNumber":"НЕИЗВЕСТНО"},{"function":"специальное","numberOfWheels":12,"loadCapacity":4000000,"brand":"MAN","model":"7502","countryOfOrigin":"НЕИЗВЕСТНО","cost":9800000,"name":"НЕИЗВЕСТНО","address":"НЕИЗВЕСТНО","phoneNumber":"НЕИЗВЕСТНО"}]
+[
+  {
+    "function": "специализированное",
+    "numberOfWheels": 8,
+    "loadCapacity": 3700000,
+    "brand": "ГАЗ",
+    "model": "54901",
+    "countryOfOrigin": "НЕИЗВЕСТНО",
+    "cost": 11000000,
+    "name": "НЕИЗВЕСТНО",
+    "address": "НЕИЗВЕСТНО",
+    "phoneNumber": "НЕИЗВЕСТНО"
+  },
+  {
+    "function": "специальное",
+    "numberOfWheels": 12,
+    "loadCapacity": 4000000,
+    "brand": "MAN",
+    "model": "7502",
+    "countryOfOrigin": "НЕИЗВЕСТНО",
+    "cost": 9800000,
+    "name": "НЕИЗВЕСТНО",
+    "address": "НЕИЗВЕСТНО",
+    "phoneNumber": "НЕИЗВЕСТНО"
+  }
+]

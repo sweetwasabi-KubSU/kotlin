@@ -1,1 +1,38 @@
-[{"acceleration":2.5,"numberOfDoors":4,"engineType":"ДВС","brand":"Ferrari","model":"458","countryOfOrigin":"НЕИЗВЕСТНО","cost":6750000,"name":"НЕИЗВЕСТНО","address":"НЕИЗВЕСТНО","phoneNumber":"НЕИЗВЕСТНО"},{"acceleration":1.7,"numberOfDoors":2,"engineType":"гибридный двигатель","brand":"Nissan","model":"GT-R","countryOfOrigin":"НЕИЗВЕСТНО","cost":13550000,"name":"НЕИЗВЕСТНО","address":"НЕИЗВЕСТНО","phoneNumber":"НЕИЗВЕСТНО"},{"acceleration":1.9,"numberOfDoors":4,"engineType":"двигатель Ванкеля","brand":"Ford","model":"GT","countryOfOrigin":"НЕИЗВЕСТНО","cost":5700000,"name":"НЕИЗВЕСТНО","address":"НЕИЗВЕСТНО","phoneNumber":"НЕИЗВЕСТНО"}]
+[
+  {
+    "acceleration": 2.5,
+    "numberOfDoors": 4,
+    "engineType": "ДВС",
+    "brand": "Ferrari",
+    "model": "458",
+    "countryOfOrigin": "НЕИЗВЕСТНО",
+    "cost": 6750000,
+    "name": "НЕИЗВЕСТНО",
+    "address": "НЕИЗВЕСТНО",
+    "phoneNumber": "НЕИЗВЕСТНО"
+  },
+  {
+    "acceleration": 1.7,
+    "numberOfDoors": 2,
+    "engineType": "гибридный двигатель",
+    "brand": "Nissan",
+    "model": "GT-R",
+    "countryOfOrigin": "НЕИЗВЕСТНО",
+    "cost": 13550000,
+    "name": "НЕИЗВЕСТНО",
+    "address": "НЕИЗВЕСТНО",
+    "phoneNumber": "НЕИЗВЕСТНО"
+  },
+  {
+    "acceleration": 1.9,
+    "numberOfDoors": 4,
+    "engineType": "двигатель Ванкеля",
+    "brand": "Ford",
+    "model": "GT",
+    "countryOfOrigin": "НЕИЗВЕСТНО",
+    "cost": 5700000,
+    "name": "НЕИЗВЕСТНО",
+    "address": "НЕИЗВЕСТНО",
+    "phoneNumber": "НЕИЗВЕСТНО"
+  }
+]
