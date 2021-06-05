@@ -28,7 +28,7 @@ fun main() {
 
     val cars = listOf(
         Car("BMW", "M6 GT3", "Германия", 6500000),
-        Car("Audi", "R8", "США", 12550000),
+        Car("Audi", "R8", "Германия", 12550000),
         Car("Lexus", "LC 500", "Италия", 4200000),
         Car("КамАЗ", "54901", "Россия", 10000000),
         Car("Тонар", "7502", "Россия", 7800000))
@@ -55,6 +55,13 @@ fun main() {
     readFromJsonFile<Sportcar>("json/sportcars.json").map { println(it) }
     readFromJsonFile<Truck>("json/trucks.json").map { println(it) }
 
+    // task 5, 6, 7
+    println("ЗАПРОСЫ\n")
+    println("1. Самая дорогая машина (Car):\n\n${cars.maxByOrNull { it.cost }}")
+    println("2. Количество машин из Германии (Car): ${cars.count { it.countryOfOrigin == "Германия" }}\n")
+    println("3. Самый быстрый спорткар (Sportcar):\n\n${sportcars.minByOrNull { it.acceleration }}")
+    println("4. Количество спорткаров с 4-мя дверьми (Sportcar): ${sportcars.count { it.numberOfDoors == 4 }}\n")
+    println("5. Марка грузовика с самой большой грузоподъёмностью (Truck): ${trucks.maxByOrNull { it.loadCapacity }!!.brand}")
 }
 
 // task 2: реализовать процедуры сериализации
